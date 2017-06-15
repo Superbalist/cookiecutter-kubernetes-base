@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ app }}
+    run: "{{ app }}-tests"
+  name: "{{ app }}-tests"
+spec:
+  restartPolicy: Never
+  containers:
+    - image: "{{ image_url }}"
+      name: "{{ app }}-tests"
+      resources: {}
+      env:
+        - name: NEW_RELIC_APP_NAME
+          value: {{ app }}
+{%- for name, value in environments[environment].items() %}
+        - name: {{ name }}
+          value: {{ value }}
+{%- endfor %}
+{%- if environment in ('staging', 'production') %}
+      volumeMounts:
+        - mountPath: /etc/cloudsql/
+          name: credentials
+          readOnly: true
+{%- endif %}
+      args:
+        - echo
+        - "Running tests"
+{%- if environment in ('staging', 'production') %}
+  volumes:
+    - name: credentials
+      secret:
+        secretName: cloudsql
+{%- endif %}
+status: {}

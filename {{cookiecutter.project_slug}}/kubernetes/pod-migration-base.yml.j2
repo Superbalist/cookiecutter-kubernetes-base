@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ app }}
+    run: "{{ app }}-migration"
+  name: "{{ app }}-migration"
+spec:
+  restartPolicy: Never
+  containers:
+    - image: "{{ image_url }}"
+      name: "{{ app }}-migration"
+      resources: {}
+      env:
+        - name: NEW_RELIC_APP_NAME
+          value: {{ app }}
+{%- for name, value in environments[environment].items() %}
+        - name: {{ name }}
+          value: {{ value }}
+{%- endfor %}
+{%- if environment in ('staging', 'production') %}
+      volumeMounts:
+        - mountPath: /etc/cloudsql/
+          name: credentials
+          readOnly: true
+{%- endif %}
+      args:
+        - echo
+        - "migration"
+{%- if environment in ('staging', 'production') %}
+  volumes:
+    - name: credentials
+      secret:
+        secretName: cloudsql
+{%- endif %}
+status: {}

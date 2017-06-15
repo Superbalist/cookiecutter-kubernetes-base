@@ -1,0 +1,11 @@
+/.idea
+/.coverage
+/src/vendor
+/src/node_modules
+/src/public/storage
+/src/.env
+/kubernetes/*.yml
+/kubernetes/*-dev.yml.j2
+/kubernetes/*-staging.yml.j2
+/kubernetes/*-production.yml.j2
+/kubernetes/*.yml.bak

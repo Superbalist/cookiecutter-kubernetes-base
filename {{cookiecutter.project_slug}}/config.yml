@@ -1,0 +1,15 @@
+app: {{ cookiecutter.project_k8s_label }}
+components:
+  - name: app
+    replicas:
+      production: 3
+      staging: 2
+      dev: 1
+
+environments:
+  production:
+    APP_ENV: production
+  staging:
+    APP_ENV: staging
+  dev:
+    APP_ENV: dev

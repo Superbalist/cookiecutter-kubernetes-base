@@ -1,0 +1,65 @@
+{% for component in components %}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ app }}
+    run: "{{ app }}-{{ component.name }}"
+    environment: "{{ environment }}"
+  name: "{{ app }}-{{ component.name }}"
+spec:
+  replicas: {{ component.replicas.get(environment, 1) }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ app }}
+      run: "{{ app }}-{{ component.name }}"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 5
+      maxUnavailable: 0
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: "{{ app }}-{{ component.name }}"
+        app: {{ app }}
+    spec:
+      containers:
+        - image: "{{ image_url }}"
+          name: "{{ app }}-{{ component.name }}"
+          resources: {}
+{%- if environment in ('staging', 'production') %}
+          volumeMounts:
+            - mountPath: /etc/cloudsql/
+              name: credentials
+              readOnly: true
+{%- elif environment == 'dev' %}
+          volumeMounts:
+            - name: app
+              mountPath: /var/www
+{%- endif %}
+          env:
+            - name: NEW_RELIC_APP_NAME
+              value: {{ app }}
+{%- for name, value in environments[environment].items() %}
+            - name: {{ name }}
+              value: {{ value }}
+{%- endfor %}
+          {% macro extra_config() %}{% block extra_container_config %}{% endblock %}{% endmacro %}{{ extra_config()|indent(10) }}
+{%- if environment in ('staging', 'production') %}
+      volumes:
+        - name: credentials
+          secret:
+            secretName: cloudsql
+{%- elif environment == 'dev' %}
+      volumes:
+        - name: app
+          hostPath:
+            path: "{{ source_path }}"
+{%- endif %}
+status: {}
+{% endfor %}

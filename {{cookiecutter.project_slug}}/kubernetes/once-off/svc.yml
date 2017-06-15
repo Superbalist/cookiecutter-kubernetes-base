@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ APP_NAME }}
+    run: {{ APP_NAME }}-app
+  name: {{ APP_NAME }}-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: {{ APP_NAME }}
+    run: {{ APP_NAME }}-app
+  type: NodePort
+status:
+  loadBalancer: {}

@@ -1,0 +1,21 @@
+{
+    "project_name": "Name of the project",
+    "project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '-')|replace('-', '_') }}",
+    "project_k8s_label": "{{ cookiecutter.project_name.lower()|replace(' ', '-')|replace('_', '-') }}",
+    "project_short_description": "A short description of the project",
+    "slackbot_webhook_url": "",
+    "google_project_id_production": "",
+    "google_project_zone_production": "",
+    "slack_notification_channel_prod": "",
+    "google_project_id_staging": "",
+    "google_project_zone_staging": "",
+    "slack_notification_channel_staging": "",
+    "google_container_registry": ["eu.gcr.io", "us.gcr.io", "asia.gcr.io"],
+    "vendor": "",
+    "base_image": "alpine:3.5",
+    "_copy_without_render": [
+        "configs/*",
+        "kubernetes/*",
+        "src/*"
+    ]
+}
