@@ -4,7 +4,7 @@ Kubernetes Cookiecutter
 A reusable template for creating new Kubernetes projects.
 
 [![Author](http://img.shields.io/badge/author-@superbalist-blue.svg?style=flat-square)](https://twitter.com/superbalist)
-[![Build Status](https://img.shields.io/travis/Superbalist/cookiecutter-k8s-base/master.svg?style=flat-square)](https://travis-ci.org/Superbalist/cookiecutter-k8s-base)
+[![Build Status](https://img.shields.io/travis/Superbalist/cookiecutter-kubernetes-base/master.svg?style=flat-square)](https://travis-ci.org/Superbalist/cookiecutter-kubernetes-base)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 Requirements
