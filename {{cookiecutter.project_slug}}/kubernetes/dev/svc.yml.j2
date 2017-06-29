@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ APP_NAME }}
-    run: {{ APP_NAME }}-app
-  name: {{ APP_NAME }}-app
+    app: {{ app }}
+    run: {{ app }}-app
+  name: {{ app }}-app
 spec:
   ports:
   - port: 80

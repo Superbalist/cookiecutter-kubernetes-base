@@ -11,7 +11,19 @@ else
   CLIENT_OS='Darwin'
 fi
 
-if minikube status | grep -q 'Does Not Exist'; then
+################################################
+# Function to disable Virtio9p on OSX
+# Return:
+#   None
+################################################
+handle_dodgy_virtio () {
+  echo "Disabling Virtio9p mounting of /Users dir and starting minikube again"
+  sed -i"" -e '/"Virtio9p"/ s/true/false/'  ~/.minikube/machines/minikube/config.json
+  minikube stop
+  minikube start
+}
+
+if echo "$(minikube status)" | head -1 | grep -q -v "Stopped\|Running"; then
   echo 'No Minikube VM found.'
   echo "Creating minikube VM..."
   if [[ "${CLIENT_OS}" == 'Darwin' ]]; then
@@ -24,11 +36,11 @@ if minikube status | grep -q 'Does Not Exist'; then
     sudo chmod u+s "$(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve"
     echo "/Users -network 192.168.64.0 -mask 255.255.255.0 -alldirs -maproot=root:wheel" | sudo tee -a /etc/exports
     sudo nfsd restart
-    minikube start --memory=3072 --cpus=1 --vm-driver=xhyve
+    minikube start --memory=3072 --cpus=1 --vm-driver=xhyve || handle_dodgy_virtio
   else
     sudo apt-get update
     sudo apt-get install libvirt-bin qemu-kvm nfs-kernel-server
-    sudo curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm -o /usr/local/bin/docker-machine-driver-kvm
+    sudo curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm -o /usr/local/bin/docker-machine-driver-kvm
     sudo chmod +x /usr/local/bin/docker-machine-driver-kvm
     echo "/home       192.168.0.0/255.255.0.0(rw,sync,no_root_squash,no_subtree_check)" | sudo tee -a /etc/exports
     sudo systemctl restart nfs-kernel-server && sleep 5
@@ -36,7 +48,7 @@ if minikube status | grep -q 'Does Not Exist'; then
   fi
 elif minikube status | grep -q 'Stopped'; then
   echo 'Starting minikube.'
-  minikube start
+  minikube start || handle_dodgy_virtio
 else
   echo 'Minikube is running.'
 fi

@@ -5,7 +5,7 @@
 set -efu
 set -o pipefail
 
-MINIKUBE_VERSION="0.19.1"
+MINIKUBE_VERSION="0.20.0"
 
 if [[ "$(uname -s)" == 'Linux' ]]; then
   CLIENT_OS='Linux'
@@ -103,7 +103,11 @@ fi
 
 if ! which jinja2 &> /dev/null; then
   echo 'Installing Jinja2 CLI and PyYAML'
-  python3 -m pip install jinja2-cli pyyaml
+  if [[ "${CLIENT_OS}" = 'Darwin' ]]; then
+    python3 -m pip install jinja2-cli pyyaml
+  else
+    sudo python3 -m pip install jinja2-cli pyyaml
+  fi
 fi
 
 if ! which hostess &> /dev/null; then
