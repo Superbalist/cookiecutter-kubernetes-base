@@ -31,7 +31,7 @@ set -f
 export IMAGE_URL
 
 if [[ "${ENVIRONMENT}" = "dev" ]]; then
-  j2 -f env "${KUBERNETES_DIR}/dev/svc.yml.j2" > "${KUBERNETES_DIR}/dev/svc.yml"
+  jinja2 -D component=app "${KUBERNETES_DIR}/dev/svc.yml.j2" > "${KUBERNETES_DIR}/dev/svc.yml"
   set +e
   echo
   echo "Ignore 'already exists' errors:"
