@@ -11,7 +11,19 @@ else
   CLIENT_OS='Darwin'
 fi
 
-if minikube status | grep -q 'Does Not Exist'; then
+################################################
+# Function to disable Virtio9p on OSX
+# Return:
+#   None
+################################################
+handle_dodgy_virtio () {
+  echo "Disabling Virtio9p mounting of /Users dir and starting minikube again"
+  sed -i"" -e '/"Virtio9p"/ s/true/false/'  ~/.minikube/machines/minikube/config.json
+  minikube stop
+  minikube start
+}
+
+if echo "$(minikube status)" | head -1 | grep -q -v "Stopped\|Running"; then
   echo 'No Minikube VM found.'
   echo "Creating minikube VM..."
   if [[ "${CLIENT_OS}" == 'Darwin' ]]; then
@@ -24,7 +36,7 @@ if minikube status | grep -q 'Does Not Exist'; then
     sudo chmod u+s "$(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machine-driver-xhyve"
     echo "/Users -network 192.168.64.0 -mask 255.255.255.0 -alldirs -maproot=root:wheel" | sudo tee -a /etc/exports
     sudo nfsd restart
-    minikube start --memory=3072 --cpus=1 --vm-driver=xhyve
+    minikube start --memory=3072 --cpus=1 --vm-driver=xhyve || handle_dodgy_virtio
   else
     sudo apt-get update
     sudo apt-get install libvirt-bin qemu-kvm nfs-kernel-server
@@ -36,7 +48,7 @@ if minikube status | grep -q 'Does Not Exist'; then
   fi
 elif minikube status | grep -q 'Stopped'; then
   echo 'Starting minikube.'
-  minikube start
+  minikube start || handle_dodgy_virtio
 else
   echo 'Minikube is running.'
 fi
