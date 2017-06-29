@@ -40,7 +40,7 @@ if echo "$(minikube status)" | head -1 | grep -q -v "Stopped\|Running"; then
   else
     sudo apt-get update
     sudo apt-get install libvirt-bin qemu-kvm nfs-kernel-server
-    sudo curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm -o /usr/local/bin/docker-machine-driver-kvm
+    sudo curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.10.0/docker-machine-driver-kvm -o /usr/local/bin/docker-machine-driver-kvm
     sudo chmod +x /usr/local/bin/docker-machine-driver-kvm
     echo "/home       192.168.0.0/255.255.0.0(rw,sync,no_root_squash,no_subtree_check)" | sudo tee -a /etc/exports
     sudo systemctl restart nfs-kernel-server && sleep 5
