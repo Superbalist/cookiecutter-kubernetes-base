@@ -45,7 +45,7 @@ fi
 jinja2 -D component=app "${KUBERNETES_DIR}/deployment-base.yml.j2" > "${KUBERNETES_BUILD_DIR}/deployments.yml"
 
 if "${ANNOUNCE_ENABLED}"; then
-  announce "Starting a deploy of ${IMAGE_URL} :shipit:"
+  announce "Starting a deploy of ${IMAGE_URL} :ferry:"
 fi
 
 if [[ "${ENVIRONMENT}" == "dev" ]]; then
@@ -68,5 +68,5 @@ check_all_deployments
 echo "Deployment complete!"
 
 if "${ANNOUNCE_ENABLED}"; then
-  announce "${IMAGE_URL} deploy complete! :tada: :cloud:"
+  announce "${IMAGE_URL} Deploy complete! :tada:"
 fi

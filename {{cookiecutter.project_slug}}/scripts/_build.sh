@@ -15,9 +15,9 @@ BASE_DIR=$(dirname "${SCRIPTS_DIR}")
 docker build --pull -t "${IMAGE_URL}" "${BASE_DIR}"
 
 if [[ -n "${PROJECT_ID}" ]]; then
-  announce "Started a build for ${IMAGE_URL} :shipit:"
+  announce "Started a build for ${IMAGE_URL} :ferry:"
 
   gcloud --project "${PROJECT_ID}" docker -- push "${IMAGE_URL}"
 
-  announce "${IMAGE_URL} successfully built. :bobafett: :cloud:"
+  announce "${IMAGE_URL} Build complete! :tada:"
 fi

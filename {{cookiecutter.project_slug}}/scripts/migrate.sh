@@ -24,7 +24,7 @@ jinja2 "${KUBERNETES_DIR}/pod-migration-base.yml.j2" > "${POD_TEMPLATE}"
 POD_NAME="${REPOSITORY}-migration"
 
 if "${ANNOUNCE_ENABLED}"; then
-  announce "Starting to run migration of ${IMAGE_URL} :shipit:"
+  announce "Starting to run migration of ${IMAGE_URL} :ferry:"
 fi
 
 echo "The pod might not exist:"
@@ -76,5 +76,5 @@ kubectl logs "${POD_NAME}"
 mv "${POD_TEMPLATE}" "${POD_TEMPLATE}.bak"
 
 if "${ANNOUNCE_ENABLED}"; then
-  announce "${IMAGE_URL} Migration complete! :tada: :cloud:"
+  announce "${IMAGE_URL} Migration complete! :tada:"
 fi

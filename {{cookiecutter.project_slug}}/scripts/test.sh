@@ -90,5 +90,5 @@ kubectl logs "${POD_NAME}"
 mv "${POD_TEMPLATE}" "${POD_TEMPLATE}.bak"
 
 if "${ANNOUNCE_ENABLED}"; then
-  announce "${IMAGE_URL} Tests complete! :tada: :cloud:"
+  announce "${IMAGE_URL} Tests complete! :tada:"
 fi
